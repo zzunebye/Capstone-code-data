@@ -1,0 +1,40 @@
+import pandas as pd
+import numpy as np
+
+# define the function blocks
+'''
+@Options
+    target
+    bert
+    sparse
+    target
+    avgw2v
+    token
+'''
+def fetchdata(dataset, info):
+    options = {
+        'pheme':{
+            'text': "./data/_PHEME_text.csv",
+            'target': "./data/_PHEME_target.csv",
+            'token': "./data/_PHEME_text_twtToken.csv",
+            'sparse': "./data/_PHEME_sparse.csv",
+            'avgw2v': "./data/_PHEME_text_AVGw2v.csv",
+            'bert': "./data/_PHEME_bert.csv"
+        },
+        'ext':{
+            'text': "./data/_PHEMEext_text.csv",
+            'target': "./data/_PHEMEext_target.csv",
+            'token': "./data/_PHEMEext_text_twtToken.csv",
+            'sparse': "./data/_PHEMEext_sparse.csv",
+            'avgw2v': "./data/_PHEMEext_text_AVGw2v.csv",
+            'bert': "./data/_PHEMEext_bert.csv"
+        },
+        'rhi':{
+            'text': "./data/_RHI_text.csv",
+            'target': "./data/_RHI_target.csv",
+            'token': "./data/_RHI_text_twtToken.csv",
+            'avgw2v': "./data/_RHI_text_AVGw2v.csv",
+            'bert': "./data/_RHI_bert.csv"
+        }
+    }
+    return pd.read_csv(options[dataset][info])

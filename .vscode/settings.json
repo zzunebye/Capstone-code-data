@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "/Users/june/miniconda3/envs/rosetta/bin/python"
+    "python.pythonPath": "/Users/june/miniconda3/envs/rosetta/bin/python",
+    "git.ignoreLimitWarning": true
 }
