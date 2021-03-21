@@ -21,7 +21,7 @@ def fetchdata(dataset, info):
             'sparse': "./data/_PHEME_sparse.csv",
             'avgw2v': "./data/_PHEME_text_AVGw2v.csv",
             'bert': "./data/_PHEME_bert.csv",
-            'thread': "./data/all/_PHEME_thread.csv"
+            'thread': "./data/_PHEME_thread.csv"
         },
         'ext':{
             'text': "./data/_PHEMEext_text.csv",
@@ -30,7 +30,7 @@ def fetchdata(dataset, info):
             'sparse': "./data/_PHEMEext_sparse.csv",
             'avgw2v': "./data/_PHEMEext_text_AVGw2v.csv",
             'bert': "./data/_PHEMEext_bert.csv",
-            'thread': "./data/all/_PHEMEext_thread.csv"
+            'thread': "./data/_PHEMEext_thread.csv"
         },
         'rhi':{
             'text': "./data/_RHI_text.csv",

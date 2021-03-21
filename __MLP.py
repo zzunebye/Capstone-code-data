@@ -322,7 +322,7 @@ def convert_df_to_unsqueezed_tensor(trainX, trainY, testX, testY, TrainX2=None, 
 
     tensor_x2 = torch.Tensor(testX.values).unsqueeze(1)
     tensor_y2 = torch.Tensor(testY.values).unsqueeze(1)
-    if (TrainX2 == None & TestX2 == None):
+    if ((TrainX2 == None) | (TestX2 == None)):
         return tensor_x1, tensor_y1, tensor_x2, tensor_y2
     elif (TrainX2 == None & TestX2 == None):
         tensor_x1_2= torch.Tensor(TrainX2.values).unsqueeze(1)
