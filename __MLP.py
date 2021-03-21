@@ -314,8 +314,9 @@ def scaleData(train, test):
 def df_to_unsqueezed_tensor(trainX, trainY, testX, testY):
     tensor_x1 = torch.Tensor(trainX.values).unsqueeze(1)
     tensor_y1 = torch.Tensor(trainY.values).unsqueeze(1)
-    train_dataset = TensorDataset(tensor_x1,tensor_y1)
+    # train_dataset = TensorDataset(tensor_x1,tensor_y1)
 
     tensor_x2 = torch.Tensor(testX.values).unsqueeze(1)
     tensor_y2 = torch.Tensor(testY.values).unsqueeze(1)
-    test_dataset = TensorDataset(tensor_x2,tensor_y2)
+    # test_dataset = TensorDataset(tensor_x2,tensor_y2)
+    return tensor_x1, tensor_y1, tensor_x2, tensor_y2
