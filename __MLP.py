@@ -311,12 +311,84 @@ def scaleData(train, test):
     test = scaler.transform(test)
     return train, test
 
-def df_to_unsqueezed_tensor(trainX, trainY, testX, testY):
+'''
+Input) 4 DataFrames of train / test data
+Return) tensorX: torch.Size([size, 1, features]), torch.Size([size, 1])
+'''
+# tensor_x1, tensor_y1, tensor_x2, tensor_y2 = __MLP.df_to_unsqueezed_tensor(pheme_AVGw2v,pheme_y,ext_AVGw2v,ext_y)
+def convert_df_to_unsqueezed_tensor(trainX, trainY, testX, testY, TrainX2=None, TestX2=None):
     tensor_x1 = torch.Tensor(trainX.values).unsqueeze(1)
     tensor_y1 = torch.Tensor(trainY.values).unsqueeze(1)
-    # train_dataset = TensorDataset(tensor_x1,tensor_y1)
 
     tensor_x2 = torch.Tensor(testX.values).unsqueeze(1)
     tensor_y2 = torch.Tensor(testY.values).unsqueeze(1)
+    if (TrainX2 == None & TestX2 == None):
+        return tensor_x1, tensor_y1, tensor_x2, tensor_y2
+    elif (TrainX2 == None & TestX2 == None):
+        tensor_x1_2= torch.Tensor(TrainX2.values).unsqueeze(1)
+
+        tensor_x2_2 = torch.Tensor(TestX2.values).unsqueeze(1)
+        return tensor_x1, tensor_x1_2, tensor_y1, tensor_x2, tensor_x2_2, tensor_y2
+    # train_dataset = TensorDataset(tensor_x1,tensor_y1)
     # test_dataset = TensorDataset(tensor_x2,tensor_y2)
-    return tensor_x1, tensor_y1, tensor_x2, tensor_y2
+'''
+# For fine-tuning BERT, the authors recommend a batch size of 16 or 32.
+batch_size = 32
+
+# Initialize WeightedRandomSampler to deal with the unbalanced dataset
+counts = np.bincount(pheme_y.values)
+labels_weights = 1. / counts
+weights = labels_weights[pheme_y.values]
+train_sampler = WeightedRandomSampler(weights, len(weights))
+test_sampler = SequentialSampler(tensor_x2)
+
+train_dataloader = DataLoader(train_dataset, batch_size=batch_size, sampler=train_sampler, num_workers=2)
+test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
+
+data = next(iter(train_dataloader))
+print("mean: %s, std: %s" %(data[0].mean(), data[0].std()))
+
+train_size = int(tensor_y1.size(0))
+test_size = int(tensor_y2.size(0))
+print(tensor_x1.shape)
+print(tensor_y1.shape)
+print("Train Size",train_size,"Test Size",test_size)
+
+=>
+
+tensor_x1, tensor_y1, tensor_x2, tensor_y2 = __MLP.convert_df_to_unsqueezed_tensor(pheme_AVGw2v, pheme_y, ext_AVGw2v, ext_y)
+train_dataset = TensorDataset(tensor_x1,tensor_y1)
+test_dataset = TensorDataset(tensor_x2,tensor_y2)
+print(tensor_x1.size(),tensor_x2.size())
+print(tensor_y1.size(),tensor_y2.size())
+---
+batch_size = 16
+
+# Initialize WeightedRandomSampler to deal with the unbalanced dataset
+train_sampler, test_sampler = __MLP.getSamplers(pheme_y, tensor_x2)
+
+train_dataloader = DataLoader(train_dataset, batch_size=batch_size, sampler=train_sampler, num_workers=2)
+test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
+
+data = next(iter(train_dataloader))
+print("mean: %s, std: %s" %(data[0].mean(), data[0].std()))
+
+train_size = int(tensor_y1.size(0))
+test_size = int(tensor_y2.size(0))
+
+print(tensor_x1.shape,tensor_x2.shape)
+print(tensor_y1.shape,tensor_y2.shape)
+print("Train Size",train_size,"Test Size",test_size)
+---
+train_acc, train_loss, val_acc, val_loss_list = __MLP.train_sequential(model=?, num_epochs=40, patience=10, criterion=criterion, optimizer=optimizer, scheduler=scheduler, train_loader=train_dataloader,train_size=train_size, test_loader=test_dataloader, test_size=test_size, PATH=PATH)
+
+__MLP.clf_report(train_loss, train_acc, val_loss_list, val_acc)
+'''
+
+def getSamplers(trainY, tensor_x2):
+    counts = np.bincount(trainY.values)
+    labels_weights = 1. / counts
+    weights = labels_weights[trainY.values]
+    train_sampler = WeightedRandomSampler(weights, len(weights))
+    test_sampler = SequentialSampler(tensor_x2)
+    return train_sampler, test_sampler
