@@ -57,6 +57,13 @@ def set_seed(seed_value=42):
     torch.manual_seed(seed_value)
     torch.cuda.manual_seed_all(seed_value)
 
+
+'''
+#Example 
+__MLP.train_sequential(model=<model>, num_epochs=40, patience=15, criterion=criterion, optimizer=optimizer, scheduler=scheduler, train_loader=train_dataloader,train_size=train_size, test_loader=test_dataloader, test_size=test_size, PATH=PATH)
+
+'''
+
 def train_sequential(model, num_epochs, criterion, optimizer, scheduler, train_loader, train_size, test_loader=None, test_size=None, patience=5, PATH='./state_dict_model.pt'):
     set_seed(42)
     train_loss = []
@@ -303,3 +310,12 @@ def scaleData(train, test):
     train = scaler.fit_transform(train)
     test = scaler.transform(test)
     return train, test
+
+def df_to_unsqueezed_tensor(trainX, trainY, testX, testY):
+    tensor_x1 = torch.Tensor(trainX.values).unsqueeze(1)
+    tensor_y1 = torch.Tensor(trainY.values).unsqueeze(1)
+    train_dataset = TensorDataset(tensor_x1,tensor_y1)
+
+    tensor_x2 = torch.Tensor(testX.values).unsqueeze(1)
+    tensor_y2 = torch.Tensor(testY.values).unsqueeze(1)
+    test_dataset = TensorDataset(tensor_x2,tensor_y2)
