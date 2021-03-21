@@ -46,7 +46,7 @@ def clf_report(train_loss, train_acc, val_loss, val_acc):
     print("Mean of Training Accuracy: %4f"%(np.mean(train_acc)))
     print("----")
     print("Max of Testing Accuracy: %4f"%(np.max(val_acc)))
-    print("Mean of Testing Loss: %4f"%(np.mean(val_loss_list)))
+    print("Mean of Testing Loss: %4f"%(np.mean(val_loss)))
     print("Mean of Testing Accuracy: %4f"%(np.mean(val_acc)))
 
 def set_seed(seed_value=42):
@@ -296,3 +296,10 @@ def predict(model, criterion, val_dataloader, val_size):
     print("\t\tValidation) Acc: {:.4f} Loss:{:.4f}".format(
         val_corrects/val_size, val_loss/test_size))
     # print("\t\tValidation) Acc: {:.4f} Loss:{:.4f} F1 score: {:4f}".format(val_corrects/val_size, val_loss/test_size, f1_score(val_label_list,val_preds_list,average='macro')))
+
+def scaleData(train, test):
+    from sklearn.preprocessing import StandardScaler
+    scaler = StandardScaler()
+    train = scaler.fit_transform(train)
+    test = scaler.transform(test)
+    return train, test
