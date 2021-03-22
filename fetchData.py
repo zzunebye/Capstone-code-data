@@ -61,3 +61,16 @@ def cv_events(data):
         df2.reset_index(inplace=True, drop=True)
         cv_pd_list.append([df1, df2])
     return cv_pd_list
+
+def divide_training_set(data):
+    NUM_EVENT = data.Event.unique().shape[0]
+    EVENTS = data.Event.unique()
+
+    cv_pd_list = []
+    for i, d in enumerate(EVENTS):
+        df1, df2 = [x for _, x in data.groupby(data['Event'] != d)]
+        df1.reset_index(inplace=True, drop=True)
+        df2.reset_index(inplace=True, drop=True)
+        cv_pd_list.append([df1, df2])
+    return cv_pd_list
+
