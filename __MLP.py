@@ -162,12 +162,11 @@ def train_sequential(model, num_epochs, criterion, optimizer, scheduler, train_l
                 patience_count += 1
             if patience_count >= patience:
                 print("Finishing the Model: Val Loss is not decreasing...")
-                print(train_loss[-6:-1])
+                print(val_loss_list[-6:-1])
                 return train_accuracy, train_loss, val_acc_list, val_loss_list
             
         else:
             if epoch_loss < best_loss:
-                print('based on train')
                 # print("prev_loss: {:.5f}".format(prev_loss))
                 # print("loss: {:.5f}".format(loss))
                 print(
