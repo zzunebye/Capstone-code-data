@@ -13,7 +13,7 @@ from torch.optim import lr_scheduler
 
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import classification_report
-from sklearn.metrics import f1_score
+from sklearn.metrics import f1_score, precision_score, recall_score
 from transformers import AdamW, get_linear_schedule_with_warmup
 
 from fetchData import fetchdata 
@@ -490,11 +490,11 @@ def predict(model, criterion, val_dataloader, val_size):
     val_acc = val_corrects.double().numpy() / val_size
     f1_running /= val_size
 
-    print("accuracy_score:\t", val_acc)
-    print('Precision Score:', str(precision_score(val_label_list,val_preds_list)))
-    print('Recall Score:\t',str(recall_score(val_label_list,val_preds_list)))
-    print("f1_score:\t", f1_running)
-    print("Test_loss:\t", val_loss)
+    print("accuracy_score:\t%.4f" % val_acc)
+    print('Precision Score:\t%.4f' % precision_score(val_label_list,running_val_preds))
+    print('Recall Score:\t%.4f' % recall_score(val_label_list,running_val_preds))
+    print("f1_score:\t%.4f" % f1_running)
+    print("Test_loss:\t%.4f" % val_loss)
 
 
 
@@ -596,18 +596,18 @@ def getSamplers(trainY, tensor_x2):
 class sparse_model(nn.Module):
     def __init__(self):
         super(sparse_model, self).__init__() # 1*20
-        self.fc1 = nn.Linear(36, 10, bias=True) # 420
+        self.fc1 = nn.Linear(36, 12, bias=True) # 420
         # self.fc2 = nn.Linear(12, 8, bias=True)
-        self.fc3 = nn.Linear(10, 1,bias=True)
+        self.fc3 = nn.Linear(12, 1,bias=True)
 
         self.drop_3 = nn.Dropout(0.3)
         self.drop_4 = nn.Dropout(0.4)
         self.drop_2 = nn.Dropout(0.2)
 
     def forward(self, x):
-        x = self.drop_4(F.elu(self.fc1(x)))
+        x = self.drop_3(F.elu(self.fc1(x)))
         # x = self.drop_2(F.elu(self.fc2(x)))
-        x = self.drop_2(self.fc3(x))
+        x = self.drop_3(self.fc3(x))
         # x = self.fc3(x)
         # x = self.fc3(x)
         return x
@@ -629,8 +629,56 @@ class W2V_net(nn.Module):
         x = self.fc3(x)
         return x
 
+class BERT_net(nn.Module):
+    def __init__(self):
+        super(BERT_net, self).__init__() # 1*20
+        self.fc1 = nn.Linear(768, 50, bias=True) # 420
+        self.fc2 = nn.Linear(50, 8, bias=True)
+        self.fc3 = nn.Linear(8, 1)
 
+        self.drop_3 = nn.Dropout(0.3)
+        self.drop_4 = nn.Dropout(0.4)
+        self.drop_2 = nn.Dropout(0.2)
+
+    def forward(self, x):
+        x = self.drop_4(F.elu(self.fc1(x)))
+        x = self.drop_2(F.elu(self.fc2(x)))
+        x = self.fc3(x)
+        return x
+
+
+class thread_model(nn.Module):
+    def __init__(self):
+        super(thread_model, self).__init__() # 1*20
+        self.fc1 = nn.Linear(38, 12, bias=True) # 420
+        # self.fc2 = nn.Linear(12, 8, bias=True)
+        self.fc3 = nn.Linear(12, 1)
+
+        self.drop_3 = nn.Dropout(0.3)
+        self.drop_4 = nn.Dropout(0.4)
+        self.drop_2 = nn.Dropout(0.2)
+
+    def forward(self, x):
+        x = self.drop_3(F.elu(self.fc1(x)))
+        # x = F.elu(self.fc2(x))
+        x = self.drop_2(self.fc3(x))
+        return x
     '''
+
+model_paths = ["./Model/state_dict_sparse_model.pt",
+               "./Model/state_dict_w2v_model.pt",
+               "./Model/state_dict_bert_model.pt",
+               "./Model/state_dict_thread_model.pt",
+               "./Model/state_dict_w2v_sparse_model.pt", 
+               "./Model/state_dict_bert_sparse_model.pt",
+               "./Model/state_dict_bert_sparse_multi.pt",
+               "./Model/state_dict_sparse_thread_model_multi.pt",
+                "./Model/state_dict_bert_sparse_model.pt",
+                "./Model/state_dict_bert_thread_model.pt",
+                "./Model/state_dict_bert_sparse_thread_model_multi.pt"
+               ]
+
+
 data = next(iter(train_dataloader))
 print("mean: %s, std: %s" %(data[0].mean(), data[0].std()))
 
@@ -640,4 +688,28 @@ test_size = int(tensor_y2.size(0))
 print(tensor_x1.shape,tensor_x2.shape)
 print(tensor_y1.shape,tensor_y2.shape)
 print("Train Size",train_size,"Test Size",test_size)
+
+
+model = __MLP.W2V_net()
+PATH = './Model/state_dict_w2v_model.pt'
+model.load_state_dict(torch.load(PATH))
+__MLP.predict(model, criterion, test_dataloader, test_size)
+
+
+# import __MLP
+pheme_sparse = pd.read_csv('./data/_PHEME_sparse.csv')
+pheme_y = pd.read_csv('./data/_PHEME_target.csv').target
+ext_sparse = pd.read_csv('./data/_PHEMEext_sparse.csv')
+ext_y = pd.read_csv('./data/_PHEMEext_text.csv').target
+
+scaler = StandardScaler()
+pheme_scaled = pd.DataFrame(scaler.fit_transform(pheme_sparse))
+ext_scaled = pd.DataFrame(scaler.transform(ext_sparse))
+
+tensor_x1, tensor_y1, tensor_x2, tensor_y2 = __MLP.convert_df_to_unsqueezed_tensor(pheme_scaled,pheme_y,ext_scaled,ext_y)
+
+train_dataset = TensorDataset(tensor_x1,tensor_y1)
+test_dataset = TensorDataset(tensor_x2,tensor_y2)
+print(tensor_x1.size(),tensor_x2.size())
+print(tensor_y1.size(),tensor_y2.size())
     '''
