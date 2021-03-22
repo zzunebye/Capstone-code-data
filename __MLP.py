@@ -145,24 +145,42 @@ def train_sequential(model, num_epochs, criterion, optimizer, scheduler, train_l
                     print("\t\tValidation) Acc: {:.4f} Loss:{:.4f}".format(
                         val_corrects/test_size, val_loss/test_size))
             val_corrects_list.append(val_corrects/test_size)
-            val_loss_list.append(val_loss/test_size)
+            val_epoch_loss= val_loss/test_size
+            val_loss_list.append(val_epoch_loss)
             val_acc = val_corrects.double() / test_size
             val_acc_list.append(val_acc)
 
-        if epoch_loss < best_loss:
-            # print("prev_loss: {:.5f}".format(prev_loss))
-            # print("loss: {:.5f}".format(loss))
-            print(
-                "\t\tSaving the best model w/ loss {:.4f}".format(epoch_loss))
-            torch.save(model.state_dict(), PATH)
-            best_loss = epoch_loss
-            patience_count = 0
-        elif best_loss < epoch_loss:
-            patience_count += 1
-        if patience_count >= patience:
-            print("Finishing the Model: Loss is not decreasing...")
-            print(train_loss[-6:-1])
-            return train_accuracy, train_loss, val_acc_list, val_loss_list
+            if val_epoch_loss < best_loss:
+                # print("prev_loss: {:.5f}".format(prev_loss))
+                # print("loss: {:.5f}".format(loss))
+                print(
+                    "\t\t\tSaving the best model w/ val loss {:.4f}".format(val_epoch_loss))
+                torch.save(model.state_dict(), PATH)
+                best_loss = val_epoch_loss
+                patience_count = 0
+            elif best_loss < val_epoch_loss:
+                patience_count += 1
+            if patience_count >= patience:
+                print("Finishing the Model: Val Loss is not decreasing...")
+                print(train_loss[-6:-1])
+                return train_accuracy, train_loss, val_acc_list, val_loss_list
+            
+        else:
+            if epoch_loss < best_loss:
+                print('based on train')
+                # print("prev_loss: {:.5f}".format(prev_loss))
+                # print("loss: {:.5f}".format(loss))
+                print(
+                    "\t\tSaving the best model w/ loss {:.4f}".format(epoch_loss))
+                torch.save(model.state_dict(), PATH)
+                best_loss = epoch_loss
+                patience_count = 0
+            elif best_loss < epoch_loss:
+                patience_count += 1
+            if patience_count >= patience:
+                print("Finishing the Model: Loss is not decreasing...")
+                print(train_loss[-6:-1])
+                return train_accuracy, train_loss, val_acc_list, val_loss_list
     return train_accuracy, train_loss, val_acc_list, val_loss_list
 
 def train2(model, num_epochs, criterion, optimizer, train_loader, train_size, test_loader=None, test_size=None, patience=5, PATH='./state_dict_model.pt'):
