@@ -12,7 +12,7 @@ from torch.utils.data.sampler import WeightedRandomSampler
 from torch.optim import lr_scheduler
 
 from sklearn.metrics import accuracy_score
-from sklearn.metrics import classification_report
+from sklearn.metrics import precision_score
 from sklearn.metrics import f1_score, precision_score, recall_score
 from transformers import AdamW, get_linear_schedule_with_warmup
 
@@ -541,11 +541,11 @@ def convert_df_to_dataloaders(trainX, trainY, testX, testY, TrainX2=None, TestX2
     # test_dataset = TensorDataset(tensor_x2,tensor_y2)
 
 def convert_df_to_unsqueezed_tensor(trainX, trainY, testX, testY, TrainX2=None, TestX2=None):
-    tensor_x1 = torch.Tensor(trainX.values).unsqueeze(1)
-    tensor_y1 = torch.Tensor(trainY.values).unsqueeze(1)
+    tensor_x1 = torch.Tensor(trainX).unsqueeze(1)
+    tensor_y1 = torch.Tensor(trainY).unsqueeze(1)
 
-    tensor_x2 = torch.Tensor(testX.values).unsqueeze(1)
-    tensor_y2 = torch.Tensor(testY.values).unsqueeze(1)
+    tensor_x2 = torch.Tensor(testX).unsqueeze(1)
+    tensor_y2 = torch.Tensor(testY).unsqueeze(1)
     if ((TrainX2 is None) | (TestX2 is None)):
         
         return tensor_x1, tensor_y1, tensor_x2, tensor_y2
