@@ -490,11 +490,11 @@ def predict(model, criterion, val_dataloader, val_size):
     val_acc = val_corrects.double().numpy() / val_size
     f1_running /= val_size
 
-    print("accuracy_score:\t%.4f" % val_acc)
+    print("accuracy_score:\t\t%.4f" % val_acc)
     print('Precision Score:\t%.4f' % precision_score(val_label_list,running_val_preds))
-    print('Recall Score:\t%.4f' % recall_score(val_label_list,running_val_preds))
-    print("f1_score:\t%.4f" % f1_running)
-    print("Test_loss:\t%.4f" % val_loss)
+    print('Recall Score:\t\t%.4f' % recall_score(val_label_list,running_val_preds))
+    print("f1_score:\t\t%.4f" % f1_running)
+    print("Test_loss:\t\t%.4f" % val_loss)
 
 
 
