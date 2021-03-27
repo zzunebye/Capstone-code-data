@@ -13,6 +13,9 @@ from nltk.stem import WordNetLemmatizer
 from nltk.stem.porter import PorterStemmer
 from nltk.tokenize import TweetTokenizer
 import string
+import matplotlib as plt
+from sklearn.ensemble import ExtraTreesClassifier
+
 
 
 def fetchRawText(path, events, tweetType):
@@ -163,6 +166,9 @@ def cv_events(data):
         cv_pd_list.append([df1, df2])
     return cv_pd_list
 
+
+
+
 def getposcount(tokens):
     postag = []
     poscount = {}
@@ -235,3 +241,62 @@ def getposcount(tokens):
         elif g1[1] in Whs:
             poscount['Whs']+=1
     return poscount
+
+
+
+def text_preprocessing_simple(text, lemma=False, twttknzr=False): # Create a function to tokenize a set of texts
+    from sklearn.ensemble import ExtraTreesClassifier
+
+    """
+    - Remove entity mentions (eg. '@united')
+    - Correct errors (eg. '&amp;' to '&')
+    @param    text (str): a string to be processed.
+    @return   text (Str): the processed string.
+    """
+
+    # text = re.sub(r"http\S+", "*", text)  # http link -> '*'
+    # sent = re.sub(r'([^\s\w@#\*]|_)+', '', sent) # Erasing Special Characters
+
+    # text = emoji.demojize(text)
+    # text = re.sub(r':[^:\s]*:', r' \g<0>', text)  # http link -> '*'
+
+    # text = re.sub(r':[^:\s]*(?:::[^:\s]*)*:', r' \g<0> ', text)  # http link -> '*'
+
+    # text = re.sub(r"\n", " ", text)   # mention -> '@'
+    text = re.sub(r"http\S+", "HTTPURL", text)  # http link -> '*'
+    # text = re.sub(r"@\S+", "@USER", text)   # mention -> '@'
+    
+    text = re.sub(r"@[A-Za-z0-9]+", "@USER", text)   # mention -> '@'
+
+    # Remove trailing whitespace
+    text = re.sub(r'\s+', ' ', text).strip()
+    text = re.sub(r'&amp;', '&', text)
+    text = tweetTokenizer.tokenize(text)
+    text = [emoji.demojize(token) for token in text]
+
+    return text
+
+def f_imp(X, y):
+    forest = ExtraTreesClassifier(n_estimators=250,
+                                random_state=3)
+
+    forest.fit(X, y)
+    importances = forest.feature_importances_
+    std = np.std([tree.feature_importances_ for tree in forest.estimators_],
+                axis=0)
+    indices = np.argsort(importances)[::-1]
+
+    # Print the feature ranking
+    print("Feature ranking:")
+
+    for f in range(X.shape[1]):
+        print("%d. feature %d: %s (%f)" % (f + 1, indices[f], X.columns[indices[f]], importances[indices[f]]))
+
+    # Plot the impurity-based feature importances of the forest
+    plt.figure()
+    plt.title("Feature importances")
+    plt.bar(range(X.shape[1]), importances[indices],
+            color="r", yerr=std[indices], align="center")
+    plt.xticks(range(X.shape[1]), indices)
+    plt.xlim([-1, X.shape[1]])
+    plt.show()
