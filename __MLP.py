@@ -62,7 +62,6 @@ __MLP.train_sequential(model=<model>, num_epochs=40, patience=15, criterion=crit
 
 '''
 def train_sequential(model, num_epochs, criterion, optimizer, scheduler, train_loader, train_size, test_loader=None, test_size=None, patience=5, PATH='./state_dict_model.pt'):
-    set_seed(42)
     train_loss = []
     patience_count = 0
     train_accuracy = []
@@ -180,7 +179,6 @@ def train_sequential(model, num_epochs, criterion, optimizer, scheduler, train_l
     return train_accuracy, train_loss, val_acc_list, val_loss_list
 
 def train_multi(model, num_epochs, criterion, optimizer, scheduler, train_loader, train_size, test_loader=None, test_size=None, patience=5, PATH='./state_dict_model.pt'):
-    set_seed(42)
     train_loss = []
     patience_count = 0
     train_accuracy = []
@@ -307,7 +305,6 @@ def train_multi(model, num_epochs, criterion, optimizer, scheduler, train_loader
     return train_accuracy, train_loss, val_acc_list, val_loss_list
 
 def train2(model, num_epochs, criterion, optimizer, train_loader, train_size, test_loader=None, test_size=None, patience=5, PATH='./state_dict_model.pt'):
-    set_seed(42)
     train_loss = []
     patience_count = 0
     train_accuracy = []

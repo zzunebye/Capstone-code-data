@@ -276,6 +276,30 @@ def text_preprocessing_simple(text, lemma=False, twttknzr=False): # Create a fun
 
     return text
 
+
+from sklearn.ensemble import ExtraTreesClassifier
+import matplotlib.pyplot as plt
+
+def test_data_process(X_test, y_test):
+    tensor_x1 = torch.Tensor(X_test.values).unsqueeze(1)
+    tensor_y1 = torch.Tensor(y_test.values).unsqueeze(1)
+    test_dataset = TensorDataset(tensor_x1,tensor_y1)
+
+    batch_size = 16
+
+    # train_sampler, test_sampler = __MLP.getSamplers(pheme_y, tensor_x2)
+    test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
+
+    data = next(iter(test_dataloader))
+    print("mean: %s, std: %s" %(data[0].mean(), data[0].std()))
+
+    test_size = int(tensor_y1.size(0))
+
+    print("Test Size",test_size)
+
+    # predict_batch
+    return test_dataloader, test_size
+
 def f_imp(X, y):
     forest = ExtraTreesClassifier(n_estimators=250,
                                 random_state=3)
@@ -293,10 +317,25 @@ def f_imp(X, y):
         print("%d. feature %d: %s (%f)" % (f + 1, indices[f], X.columns[indices[f]], importances[indices[f]]))
 
     # Plot the impurity-based feature importances of the forest
-    plt.figure()
+    plt.figure(figsize=(12, 7))
     plt.title("Feature importances")
-    plt.bar(range(X.shape[1]), importances[indices],
-            color="r", yerr=std[indices], align="center")
-    plt.xticks(range(X.shape[1]), indices)
-    plt.xlim([-1, X.shape[1]])
+    plt.scatter(importances[indices], X.columns[indices], color="r")
+    plt.tight_layout()
+    plt.show()
+
+def f_imp2(X, y):
+    rf = RandomForestClassifier(random_state=42)
+    rf.fit(X, y)
+    result = permutation_importance(rf, X, y, n_repeats=10,
+                                    random_state=42, n_jobs=2)
+    sorted_idx = result.importances_mean.argsort()
+
+    fig, ax = plt.subplots()
+    fig.set_size_inches(15, 7)
+    ax.boxplot(result.importances[sorted_idx].T,
+            vert=False, labels=X.columns[sorted_idx])
+    ax.set_title("Permutation Importances (test set)",fontdict={'fontsize': 'x-large', 'fontweight': 'medium'})
+    ax.labelsize='x-large'
+    fig.titlesize='x-large'
+    fig.tight_layout()
     plt.show()
