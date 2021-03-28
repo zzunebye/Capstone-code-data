@@ -13,8 +13,21 @@ from nltk.stem import WordNetLemmatizer
 from nltk.stem.porter import PorterStemmer
 from nltk.tokenize import TweetTokenizer
 import string
-import matplotlib as plt
-from sklearn.ensemble import ExtraTreesClassifier
+import matplotlib.pyplot as plt
+from sklearn.ensemble import ExtraTreesClassifier, RandomForestClassifier
+from sklearn.inspection import permutation_importance
+
+
+def set_seed(seed=42):
+    random.seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed) # if you are using multi-GPU.
+    torch.backends.cudnn.benchmark = False
+    torch.backends.cudnn.deterministic = True
+
 
 
 
@@ -288,7 +301,7 @@ def test_data_process(X_test, y_test):
     batch_size = 16
 
     # train_sampler, test_sampler = __MLP.getSamplers(pheme_y, tensor_x2)
-    test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
+    test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=0)
 
     data = next(iter(test_dataloader))
     print("mean: %s, std: %s" %(data[0].mean(), data[0].std()))
@@ -302,7 +315,7 @@ def test_data_process(X_test, y_test):
 
 def f_imp(X, y):
     forest = ExtraTreesClassifier(n_estimators=250,
-                                random_state=3)
+                                random_state=42)
 
     forest.fit(X, y)
     importances = forest.feature_importances_
