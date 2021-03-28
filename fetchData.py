@@ -1,4 +1,4 @@
-simport pandas as pd
+import pandas as pd
 import numpy as np
 import random
 
@@ -73,4 +73,5 @@ def divide_training_set(data):
         df2.reset_index(inplace=True, drop=True)
         cv_pd_list.append([df1, df2])
     return cv_pd_list
+
 

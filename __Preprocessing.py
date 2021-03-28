@@ -315,7 +315,7 @@ def test_data_process(X_test, y_test):
 
 def f_imp(X, y):
     forest = ExtraTreesClassifier(n_estimators=250,
-                                random_state=42)
+                                random_state=3)
 
     forest.fit(X, y)
     importances = forest.feature_importances_
@@ -330,9 +330,19 @@ def f_imp(X, y):
         print("%d. feature %d: %s (%f)" % (f + 1, indices[f], X.columns[indices[f]], importances[indices[f]]))
 
     # Plot the impurity-based feature importances of the forest
+    
     plt.figure(figsize=(12, 7))
+    size=20
+    params = {'legend.fontsize': 'large',
+            'figure.figsize': (20,8),
+            'axes.labelsize': size,
+            'axes.titlesize': size,
+            'xtick.labelsize': size*0.75,
+            'ytick.labelsize': size*0.75,
+            'axes.titlepad': 25}
+    plt.rcParams.update(params)
     plt.title("Feature importances")
-    plt.scatter(importances[indices], X.columns[indices], color="r")
+    plt.bar( X.columns[indices], importances[indices], color="r")
     plt.tight_layout()
     plt.show()
 
