@@ -20,7 +20,7 @@ from fetchData import fetchdata
 import random
 
 def clf_report(train_loss, train_acc, val_loss, val_acc):
-    fig, ax = plt.subplots(2, 1, figsize=(12,8))
+    fig, ax = plt.subplots(2, 1, figsize=(12,12))
     ax[0].plot(train_loss[:],label='train')
     ax[0].plot(val_loss[:],label='test')
     ax[0].set_ylabel('Classification Accuracy')
@@ -253,6 +253,7 @@ def train_multi(model, num_epochs, criterion, optimizer, scheduler, train_loader
                     v_loss = criterion(val_outputs, val_labels.unsqueeze(1))
                     val_loss += (v_loss.item() * val_labels.size(0))
                     val_corrects += torch.sum(val_preds == val_labels)
+
                     # print("== length",val_preds == val_label)
                     # accuracy = (preds == b_labels).cpu().numpy().mean() * 100
 
@@ -260,7 +261,6 @@ def train_multi(model, num_epochs, criterion, optimizer, scheduler, train_loader
                 # print("length of one batch")
                 # print("FINAL val_corrects:",val_corrects)
                 # print("test_size:",test_size)
-                    
                 if (epoch % 2 == 0):
                     val_preds_list = torch.cat(val_preds_list, 0)
                     val_label_list = torch.cat(val_label_list, 0)
@@ -268,7 +268,8 @@ def train_multi(model, num_epochs, criterion, optimizer, scheduler, train_loader
                     print("\t\tValidation) Acc: {:.4f} Loss:{:.4f}".format(
                         val_corrects/test_size, val_loss/test_size))
             val_corrects_list.append(val_corrects/test_size)
-            val_loss_list.append(val_loss/test_size)
+            val_epoch_loss= val_loss/test_size
+            val_loss_list.append(val_epoch_loss)
             val_acc = val_corrects.double() / test_size
             val_acc_list.append(val_acc)
 
