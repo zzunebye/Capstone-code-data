@@ -179,9 +179,6 @@ def cv_events(data):
         cv_pd_list.append([df1, df2])
     return cv_pd_list
 
-
-
-
 def getposcount(tokens):
     postag = []
     poscount = {}

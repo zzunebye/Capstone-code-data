@@ -18,6 +18,8 @@ from transformers import AdamW, get_linear_schedule_with_warmup
 
 from fetchData import fetchdata 
 import random
+from sklearn.preprocessing import StandardScaler
+
 
 def clf_report(train_loss, train_acc, val_loss, val_acc):
     fig, ax = plt.subplots(2, 1, figsize=(12,12))
@@ -497,10 +499,9 @@ def predict(model, criterion, val_dataloader, val_size):
 
 
 def scaleData(train, test):
-    from sklearn.preprocessing import StandardScaler
     scaler = StandardScaler()
-    train = scaler.fit_transform(train)
-    test = scaler.transform(test)
+    train = pd.DataFrame(scaler.fit_transform(train))
+    test = pd.DataFrame(scaler.transform(test))
     return train, test
 
 '''
