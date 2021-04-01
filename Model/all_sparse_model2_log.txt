@@ -1,0 +1,45 @@
+
+
+************************************************************
+STARTING A CROSS-VALIDATION ... [100] epochs
+************************************************************
+TIME: 01/04/2021 10:16:06
+LAYER: [Sequential(
+  (0): Linear(in_features=101, out_features=24, bias=True)
+  (1): ELU(alpha=1.0)
+  (2): Dropout(p=0.5, inplace=False)
+  (3): Linear(in_features=24, out_features=6, bias=True)
+  (4): ELU(alpha=1.0)
+  (5): Dropout(p=0.5, inplace=False)
+  (6): Linear(in_features=6, out_features=1, bias=True)
+)]
+
+
+************************************************************
+STARTING A CROSS-VALIDATION ... [100] epochs
+************************************************************
+TIME: 01/04/2021 10:23:40
+LAYER: [Sequential(
+  (0): Linear(in_features=101, out_features=24, bias=True)
+  (1): ELU(alpha=1.0)
+  (2): Dropout(p=0.5, inplace=False)
+  (3): Linear(in_features=24, out_features=6, bias=True)
+  (4): ELU(alpha=1.0)
+  (5): Dropout(p=0.5, inplace=False)
+  (6): Linear(in_features=6, out_features=1, bias=True)
+)]
+
+
+************************************************************
+STARTING A CROSS-VALIDATION ... [2] epochs
+************************************************************
+TIME: 01/04/2021 10:55:28
+LAYER: [Sequential(
+  (0): Linear(in_features=101, out_features=24, bias=True)
+  (1): ELU(alpha=1.0)
+  (2): Dropout(p=0.5, inplace=False)
+  (3): Linear(in_features=24, out_features=6, bias=True)
+  (4): ELU(alpha=1.0)
+  (5): Dropout(p=0.5, inplace=False)
+  (6): Linear(in_features=6, out_features=1, bias=True)
+)]

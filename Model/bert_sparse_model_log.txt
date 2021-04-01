@@ -1,0 +1,26 @@
+
+
+************************************************************
+STARTING A CROSS-VALIDATION ... [5] epochs
+************************************************************
+TIME: 01/04/2021 13:24:27
+LAYER: [Sequential(
+  (0): Linear(in_features=869, out_features=80, bias=True)
+  (1): ELU(alpha=1.0)
+  (2): Dropout(p=0.5, inplace=False)
+  (3): Linear(in_features=80, out_features=16, bias=True)
+  (4): ELU(alpha=1.0)
+  (5): Dropout(p=0.5, inplace=False)
+  (6): Linear(in_features=16, out_features=1, bias=True)
+)]
+
+STARTING TEST of 5 EPOCH
+
+
+----------------------------------------------------------------------------
+> FOLD 1
+----------------------------------------------------------------------------
+mean: 236.33355712890625, std: 4946.08349609375
+Train Size: 4346, Test Size: 2079
+total step: 2720
+PATH: ./Model/bert_sparse_model_1.pt
