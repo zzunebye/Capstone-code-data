@@ -1,0 +1,46 @@
+
+
+************************************************************
+STARTING A CROSS-VALIDATION ... [150] epochs
+************************************************************
+TIME: 03/04/2021 14:52:50
+LAYER: [Sequential(
+  (0): Linear(in_features=768, out_features=50, bias=True)
+  (1): ELU(alpha=1.0)
+  (2): Dropout(p=0.5, inplace=False)
+  (3): Linear(in_features=50, out_features=8, bias=True)
+  (4): ELU(alpha=1.0)
+  (5): Dropout(p=0.5, inplace=False)
+  (6): Linear(in_features=8, out_features=1, bias=True)
+)]
+
+STARTING TEST of 150 EPOCH
+
+
+----------------------------------------------------------------------------
+> FOLD 1
+----------------------------------------------------------------------------
+mean: 0.04005443677306175, std: 0.3306717276573181
+Train Size: 4346, Test Size: 2079
+total step: 81600
+PATH: ./Model/bert_model_1.pt
+Accuracy for fold 1: 81.626
+F1 Score for fold 1: 0.538
+Loss for fold 1: 0.492
+----------------------------------------------------------------------------
+> FOLD 2
+----------------------------------------------------------------------------
+mean: 0.03968147560954094, std: 0.3293634355068207
+Train Size: 5282, Test Size: 1143
+total step: 99150
+PATH: ./Model/bert_model_2.pt
+Accuracy for fold 2: 69.466
+F1 Score for fold 2: 0.435
+Loss for fold 2: 0.594
+----------------------------------------------------------------------------
+> FOLD 3
+----------------------------------------------------------------------------
+mean: 0.039583928883075714, std: 0.33054661750793457
+Train Size: 5956, Test Size: 469
+total step: 111750
+PATH: ./Model/bert_model_3.pt

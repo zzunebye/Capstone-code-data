@@ -554,6 +554,19 @@ def convert_df_to_unsqueezed_tensor(trainX, trainY, testX, testY, TrainX2=None, 
         return tensor_x1, tensor_x1_2, tensor_y1, tensor_x2, tensor_x2_2, tensor_y2
     # train_dataset = TensorDataset(tensor_x1,tensor_y1)
     # test_dataset = TensorDataset(tensor_x2,tensor_y2)
+
+def convert_df_to_unsqueezed_tensor_multi(trainX, trainY, testX, testY, TrainX2, TestX2):
+    tensor_x1 = torch.Tensor(trainX).unsqueeze(1)
+    tensor_y1 = torch.Tensor(trainY).unsqueeze(1)
+
+    tensor_x2 = torch.Tensor(testX).unsqueeze(1)
+    tensor_y2 = torch.Tensor(testY).unsqueeze(1)
+
+    tensor_x1_2= torch.Tensor(TrainX2.values).unsqueeze(1)
+    tensor_x2_2 = torch.Tensor(TestX2.values).unsqueeze(1)
+    return tensor_x1, tensor_x1_2, tensor_y1, tensor_x2, tensor_x2_2, tensor_y2
+    # train_dataset = TensorDataset(tensor_x1,tensor_y1)
+    # test_dataset = TensorDataset(tensor_x2,tensor_y2)
 '''
 tensor_x1, tensor_y1, tensor_x2, tensor_y2 = __MLP.convert_df_to_unsqueezed_tensor(pheme_AVGw2v, pheme_y, ext_AVGw2v, ext_y)
 train_dataset = TensorDataset(tensor_x1,tensor_y1)
