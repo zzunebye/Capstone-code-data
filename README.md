@@ -9,5 +9,20 @@ Rumor Detection is a binary classification task to classify whether a social med
 ## II. DESIGN/METHODOLOGY/IMPLEMENTATION
 This project approaches the rumor detection problem by utilizing two different aspects of the chosen dataset. The first is to exploit tweet object data stored in the files of JSON format to create hand-crafted features. The second is to perform word embedding algorithms to get dense vectors of tweet texts and then feed them into a deep neural network. The finalized list of features extracted for this experiment is presented in figure 1.
 
+### A. Data 
+
+The experiment used the PHEME dataset and PHEME-R dataset. PHEME dataset contains a total of 5,802 annotated rumors that consist of 3,830 tweets and 1,972 tweets that are deemed to be either rumors or not rumors, respectively.
+
+### B. Cross Validation
+
+Furthermore, to avoid the potential overfitting problems that could worsen the model's generalization ability on the small dataset of PHEME, k-fold Cross Validation is applied on PHEME and PHEME-R dataset, respectively, per event.
+
+## III. EVALAUATION AND RESULTS
+![image](https://user-images.githubusercontent.com/18901970/117030779-8bc75a80-ad32-11eb-88f0-ad1904b42d23.png)
+TABLE I. THE RESULT OF BASELINE CLASSIFIERS INCLUDING CV-9 SVM, AND CRF ON PHEME DATASET
+
+![image](https://user-images.githubusercontent.com/18901970/117030877-a4377500-ad32-11eb-947d-7c1e1ad43186.png)
+THE RESULT OF CV-9 & NEURAL NETWORK WITH WEIGHTED SAMPLING
+
 ## IV. CONCLUSION
 The analysis of the performances of each model and feature set, respectively, are presented in Table 1 and 2. The final model can classify the unseen events based on the feature sets extracted from the rumorous tweets from other events that have been discussed on Twitter, with an accuracy of 76.08 and an F1 score of 44.32 on the PHEME dataset, and an accuracy of 70.16 and an F1 score of 42.43 on the dataset combining the PHEME and the PHEME-R dataset.
